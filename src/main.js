@@ -77,7 +77,6 @@ var trainDataSet = (trainer, dataSet , value)=>{
 
   dataSet.map(obj=>{
     var arr = obj.arr;
-    console.log("obj.value", obj.value);
     var vol = new convnetjs.Vol(arr);
     return {vol:vol, value:obj.value};
   }).
@@ -96,11 +95,9 @@ var generateTrainer = (net)=>{
 }
 
 var predictDataSet = (arr,net)=>{
-  console.log("arr", arr);
   return arr.map(obj=>{
     
     var valueArr = obj.arr; 
-    console.log("valueArr", valueArr);
     return new convnetjs.Vol(valueArr.sort());
   }).map(x=>{
     return net.forward(x).w[0];
@@ -115,14 +112,10 @@ var trainer = generateTrainer(net);
 
 
 
-for(var i = 0; i < 10;i++){
-  losingSetAndValue = losingSet.map(arr=>{
-
-    return {arr:arr, value:1};
-  })
+for(var i = 0; i < 100;i++){
 
   trainDataSet(trainer, winningSet, 0);
-  trainDataSet(trainer, losingSetAndValue, 1);
+  trainDataSet(trainer, losingSet, 1);
 
 }
 

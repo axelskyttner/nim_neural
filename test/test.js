@@ -26,22 +26,6 @@ describe("test", function(){
     expect(minValue).to.be.a.number;
   });
 
-//   it("Should have a predicting function that works good on the winning test elements", function(){
-//    var result = game.result;
-//    var predictFunction = game.predictDataSet;
-//    var testDataSet = game.testWinningDataSet;
-//    var results = predictFunction(testDataSet);
-//    var minValue = getMinValue( results);
-//    expect(minValue).to.be.above(0.5);
-//   });
-//   it("Should have a predicting function that works good on the test elements losing", function(){
-//    var result = game.result;
-//    var predictFunction = game.predictDataSet;
-//    var testDataSet = game.testLosingDataSet;
-//    var results = predictFunction(testDataSet);
-//    var minValue = getMinValue( results);
-//    expect(minValue).to.be.below(0.5);
-//   });
 });
 
 describe("test of creating test data", function(){

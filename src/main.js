@@ -77,6 +77,7 @@ var trainDataSet = (trainer, dataSet , value)=>{
 
   dataSet.map(obj=>{
     var arr = obj.arr;
+    console.log("obj.value", obj.value);
     var vol = new convnetjs.Vol(arr);
     return {vol:vol, value:obj.value};
   }).
@@ -94,20 +95,22 @@ var generateTrainer = (net)=>{
 
 }
 
-var predictDataSet = (arr)=>{
+var predictDataSet = (arr,net)=>{
+  console.log("arr", arr);
   return arr.map(obj=>{
     
-    var arr = obj.arr; 
-    return new convnetjs.Vol(arr.sort())
-  }).map(x=>net.forward(x).w[0])
+    var valueArr = obj.arr; 
+    console.log("valueArr", valueArr);
+    return new convnetjs.Vol(valueArr.sort());
+  }).map(x=>{
+    return net.forward(x).w[0];
+  });
 }
 
 var net = generateNet();
 var winningSet = generateWinningData();
 var losingSet = generateLosingData();
 
-var testWinningDataSet = [[1,14,15],[1,12,13], [20,20,0], [0,500,500]];
-var testLosingDataSet = [ [0,0,11],[1,2,2], [0,2,0], [0,500,0] ,[3,5,7]];
 var trainer = generateTrainer(net);
 
 
@@ -127,8 +130,6 @@ var exportObject = {
   predictDataSet: predictDataSet,
   winningSet: winningSet,
   losingSet: losingSet,
-  testWinningDataSet: testWinningDataSet,
-  testLosingDataSet: testLosingDataSet,
   generateWinningData: generateWinningData,
   generateLosingData: generateLosingData,
   generateNet: generateNet

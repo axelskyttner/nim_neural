@@ -35,7 +35,8 @@
         };
 
         var predictAndDisplayDataset = (dataSet, headerString, winningSet) => {
-            let results = nim.predictDataSet(dataSet);
+          var net  = nim.generateNet();
+            let results = nim.predictDataSet(dataSet, net);
             let divs = createDivs(dataSet, results);
             displayTestDivs(divs, headerString);
             document.body.appendChild(createSummaryDiv(results, winningSet));
@@ -62,8 +63,6 @@
         }
         predictAndDisplayDataset(nim.losingSet, "TrainingData Losing", false);
         predictAndDisplayDataset(nim.winningSet, "TrainingData Winning", true);
-        predictAndDisplayDataset(nim.testWinningDataSet, "TestData Winning", true);
-        predictAndDisplayDataset(nim.testLosingDataSet, "TestData Losing", false);
     </script>
 </body>
 

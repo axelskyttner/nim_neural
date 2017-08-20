@@ -96,7 +96,7 @@ var generateWinningData = ()=>{
     value:winningValue
 
   }
-  var winningSet = [ ].concat(winningMoves1).concat(winningMoves2);
+  var winningSet = [obj ].concat(winningMoves1).concat(winningMoves2);
 
   return winningSet;
 

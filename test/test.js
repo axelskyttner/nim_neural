@@ -11,22 +11,6 @@ var getMinValue = (arr)=>{
 }
 describe("test", function(){
 
-  it("Should have a predicting function that works good on the winning elements", function(){
-    var predictFunction = game.predictDataSet;
-    var winningSet = game.winningSet;
-    var net = game.generateNet();
-    var results = predictFunction(winningSet, net);
-    //var minValue = getMinValue(results);
-    //expect(minValue).to.be.a.number;
-  });
-  it("Should have a predicting function that works good on the winning elements", function(){
-    var predictFunction = game.predictDataSet;
-    var winningSet = game.losingSet;
-    var net = game.generateNet();
-    var results = predictFunction(winningSet, net);
-    var minValue = getMinValue(results);
-    expect(minValue).to.be.a.number;
-  });
 
 });
 

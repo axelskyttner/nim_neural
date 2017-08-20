@@ -24,23 +24,30 @@
             return divs;
         }
 
-        var displayTestDivs = (divs, headerString) => {
+        var displayHeader = (headerString)=>{
 
             var headerLosing = document.createElement("h2");
             headerLosing.innerHTML = headerString;
             document.body.appendChild(headerLosing);
+
+        }
+
+        var displayTestDivs = (divs) => {
+
             divs.forEach(function (element) {
                 document.body.appendChild(element);
             }, this);
         };
 
-        var predictAndDisplayDataset = (dataSet, headerString, winningSet) => {
-          var net  = nim.generateNet();
-            let results = nim.predictDataSet(dataSet, net);
-            let divs = createDivs(dataSet, results);
-            displayTestDivs(divs, headerString);
+        var predictAndDisplayDataset = (net, dataSet, headerString, winningSet) => {
+          var dataValue = (winningSet === true)? 1 : 0;
+            let results = nim.predictDataSet(dataSet, net, dataValue);
+            let divs = createDivs(dataSet.map(getArr), results);
+            displayHeader( headerString);
             document.body.appendChild(createSummaryDiv(results, winningSet));
-        }
+            displayTestDivs(divs, headerString);
+        } 
+        var getArr = obj=>obj.arr;
         var mean = (results) => {
             return results.reduce((sum, a) => sum + a, 0) / results.length;
         }
@@ -61,8 +68,12 @@
             div.innerHTML += "-----nrCorrect: " + resultSummary.nrCorrect + "------- of a total: " + resultSummary.totalNr;
             return div;
         }
-        predictAndDisplayDataset(nim.losingSet, "TrainingData Losing", false);
-        predictAndDisplayDataset(nim.winningSet, "TrainingData Winning", true);
+        var network = nim.networks[0];
+        predictAndDisplayDataset(network, nim.losingSet, "TrainingData Losing", false);
+        predictAndDisplayDataset(network, nim.winningSet, "TrainingData Winning", true);
+        window.setInterval(function(){
+          location.reload()
+            },1000);
     </script>
 </body>
 

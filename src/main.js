@@ -32,6 +32,7 @@ var generateNet = ()=>{
 var generateLosingData = ()=>{
   var losingMoves1 = [];
   var losingMoves2 = [];
+  var losingMoves3 = [];
   for(var i = 2; i < 10;i++){
     var obj = {
       arr: [0,0,i],
@@ -47,7 +48,20 @@ var generateLosingData = ()=>{
     losingMoves2.push(obj); 
   }
 
-  var losingSet = [ ].concat(losingMoves1).concat(losingMoves2);
+  for(var i = 1; i < 10; i++){
+    for(var j = 2; j < 10; j++){
+      
+      var obj = {
+        arr: [i,j,j],
+        value: losingValue
+      }
+      losingMoves3.push(obj);
+
+    }
+
+  }
+
+  var losingSet = [ ].concat(losingMoves1).concat(losingMoves2).concat(losingMoves3);
   return losingSet;
 }
 
@@ -132,10 +146,11 @@ var predictDataSet = (arr,net, label)=>{
 
 
 var net = generateNet();
-var winningSet = generateData().filter(obj=>obj.value === winningValue);
-var losingSet = generateData().filter(obj=>obj.value === losingValue);
-
-var trainer = generateTrainer(net);
+var allData = shuffleArray(generateData())
+var trainingData = allData.slice(0,-4);
+var testData  = allData.slice(-4);
+var winningSet = trainingData.filter(obj=>obj.value === winningValue);
+var losingSet = trainingData.filter(obj=>obj.value === losingValue);
 
 var toBeNetworks = [1,2,3,4,5,6,7,8,9,10];
 
@@ -147,23 +162,23 @@ networks.reduce(network=>{
   var results = predictDataSet(winningSet, network, 1);
   var resultsLosing = predictDataSet(losingSet, network, 0);
   var percent =   results.filter( val => val > 0.5).length;
-  var percentLosing =   resultsLosing.filter( val => val > 0.5).length;
+  var percentLosing = resultsLosing.filter( val => val > 0.5).length;
+
   return network;
 });
 
 
 var exportObject = {
   predictDataSet: predictDataSet,
-  winningSet: winningSet,
-  losingSet: losingSet,
-  generateWinningData: generateWinningData,
-  generateLosingData: generateLosingData,
+  winningData: winningSet,
+  losingData: losingSet,
+  testData, testData,
   generateNet: generateNet,
   networks: networks
 
 };
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
-module.exports = exportObject;
+  module.exports = exportObject;
 else{
 
   window.nim = exportObject;

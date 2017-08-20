@@ -16,7 +16,7 @@ describe("test", function(){
 
 describe("test of creating test data", function(){
   it("should have some test data", function(){
-    var testData = game.generateWinningData();
+    var testData = game.winningData;
     expect(testData.length).to.be.above(0);
   });
 });
@@ -33,7 +33,7 @@ describe("test of layer generation",function(){
 
 describe("test of creating test data", function(){
   it("should have some test data", function(){
-    var testData = game.generateLosingData();
+    var testData = game.losingData;
     expect(testData.length).to.be.above(0);
   });
 });

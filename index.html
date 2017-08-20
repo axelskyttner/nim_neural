@@ -69,11 +69,15 @@
             return div;
         }
         var network = nim.networks[0];
-        predictAndDisplayDataset(network, nim.losingSet, "TrainingData Losing", false);
-        predictAndDisplayDataset(network, nim.winningSet, "TrainingData Winning", true);
+        var testDataWinning = nim.testData.filter(data=>data.value === 1);
+        var testDataLosing = nim.testData.filter(data=>data.value === 0);
+        predictAndDisplayDataset(network, nim.losingData, "TrainingData Losing", false);
+        predictAndDisplayDataset(network, nim.winningData, "TrainingData Winning", true);
+        predictAndDisplayDataset(network, testDataWinning, "Test data winning", true);
+        predictAndDisplayDataset(network, testDataLosing, "Test data losing", false);
         window.setInterval(function(){
           location.reload()
-            },1000);
+            },5000);
     </script>
 </body>
 

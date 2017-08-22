@@ -84,7 +84,8 @@ var resultToString = (resultW)=> resultW[0] > resultW[1]  ? "Losing" : "Winning"
         var testDataWinning = nim.testData.filter(data=>data.value === 1);
         var testDataLosing = nim.testData.filter(data=>data.value === 0);
 
-        predictAndDisplayDataset(network, trainingData, "Random Data");
+        predictAndDisplayDataset(network, trainingData, "TrainingData");
+        predictAndDisplayDataset(network, nim.testData, "TestData");
         //predictAndDisplayDataset(network, nim.losingData, "TrainingData Losing", false);
         //predictAndDisplayDataset(network, nim.winningData, "TrainingData Winning", true);
 /*

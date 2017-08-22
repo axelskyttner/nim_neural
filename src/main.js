@@ -13,6 +13,7 @@ var generateNet = ()=>{
 
   // input layer of size 1x1x2 (all volumes are 3D)
   layer_defs.push({type:'input', out_sx:1, out_sy:1, out_depth:3});
+  layer_defs.push({type:'fc', num_neurons:10, activation:'relu'});
 
 
   // a softmax classifier predicting probabilities for two classes: 0,1
@@ -37,7 +38,7 @@ var generateLosingData = ()=>{
     }
     losingMoves1.push(obj); 
   }
-  for(var i = 5; i < 10;i++){
+  for(var i = 5; i < 20;i = i + 2){
     var obj = {
       arr: [1,i,i+1],
       value: losingValue
@@ -87,7 +88,7 @@ var generateWinningData = ()=>{
     }
     winningMoves1.push(obj);
   }
-  for(var i = 2; i< 10; i = i + 2){
+  for(var i = 2; i< 20; i = i + 2){
     var obj = {
       arr:[1,i,i+1],
       value: winningValue
@@ -154,7 +155,7 @@ var predictDataSet = (arr,net)=>{
 
 
 var allData = shuffleArray(generateData())
-var sliceValue = -3;
+var sliceValue = -10;
 var trainingData = allData.slice(0,sliceValue);
 var testData  = allData.slice(sliceValue);
 var winningSet = trainingData.filter(obj=>obj.value === winningValue);
@@ -164,11 +165,7 @@ var toBeNetworks = [1,2,3,4,5,6,7,8,9,10];
 
 var network = generateNet();
 var trainer = generateTrainer(network);
-var debugArr =  [
-  {arr:[0,0,1], value:1},
-  {arr:[0,0,2], value:0},
-];
-for(var i = 0; i < 10000; i++){
+for(var i = 0; i < 1000; i++){
    
   //trainer.train(y, 0);
   trainDataSet(trainer,trainingData); 

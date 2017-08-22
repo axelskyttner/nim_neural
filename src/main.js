@@ -14,10 +14,6 @@ var generateNet = ()=>{
   // input layer of size 1x1x2 (all volumes are 3D)
   layer_defs.push({type:'input', out_sx:1, out_sy:1, out_depth:3});
 
-  // some fully connected layers
-  layer_defs.push({type:'fc', num_neurons:5, activation:'sigmoid'});
-  layer_defs.push({type:'fc', num_neurons:5, activation:'sigmoid'});
-  layer_defs.push({type:'fc', num_neurons:5, activation:'sigmoid'});
 
   // a softmax classifier predicting probabilities for two classes: 0,1
   layer_defs.push({type:'softmax', num_classes:2});
@@ -33,6 +29,7 @@ var generateLosingData = ()=>{
   var losingMoves1 = [];
   var losingMoves2 = [];
   var losingMoves3 = [];
+  var losingMoves4 = [];
   for(var i = 2; i < 10;i++){
     var obj = {
       arr: [0,0,i],
@@ -58,10 +55,16 @@ var generateLosingData = ()=>{
       losingMoves3.push(obj);
 
     }
-
+  }
+  for(var i = 6; i < 10;i++){
+    var obj = {
+      arr: [1,4,i],
+      value: losingValue
+    }
+    losingMoves4.push(obj); 
   }
 
-  var losingSet = [ ].concat(losingMoves1).concat(losingMoves2).concat(losingMoves3);
+  var losingSet = [ ].concat(losingMoves1).concat(losingMoves2);
   return losingSet;
 }
 
@@ -92,11 +95,12 @@ var generateWinningData = ()=>{
     winningMoves2.push(obj);
   }
   var obj = {
+
     arr: [2,4,6],
     value:winningValue
 
   }
-  var winningSet = [obj ].concat(winningMoves1).concat(winningMoves2);
+  var winningSet = [ obj ].concat(winningMoves2).concat(winningMoves2);
 
   return winningSet;
 
@@ -108,9 +112,12 @@ var trainDataSet = (trainer, dataSet )=>{
   dataSet.map(obj=>{
     var arr = obj.arr;
     var vol = new convnetjs.Vol(arr);
-    return {vol:vol, value:obj.value};
+    var value = obj.value;
+    return {vol:vol, value:value};
   }).
-  forEach(obj=>trainer.train(obj.vol,obj.value));
+  forEach(obj=>{
+    var stats = trainer.train(obj.vol,obj.value);
+  });
 
 };
 
@@ -127,45 +134,48 @@ var shuffleArray = function(array) {
 var generateTrainer = (net)=>{
 
   var trainer = new convnetjs.Trainer(net, {
-    learning_rate:0.1, 
-    l2_decay:0.01
+    method: 'adadelta',
+    l2_decay:0.001
   });
   return trainer;
 
 }
 
-var predictDataSet = (arr,net, label)=>{
+var predictDataSet = (arr,net)=>{
   return arr.map(obj=>{
     
     var valueArr = obj.arr; 
-    return new convnetjs.Vol(valueArr.sort());
+    return new convnetjs.Vol(valueArr);
   }).map(x=>{
-    return net.forward(x).w[label];
+    var res = net.forward(x);
+    return net.forward(x);
   });
 }
 
 
-var net = generateNet();
 var allData = shuffleArray(generateData())
-var trainingData = allData.slice(0,-4);
-var testData  = allData.slice(-4);
+var sliceValue = -3;
+var trainingData = allData.slice(0,sliceValue);
+var testData  = allData.slice(sliceValue);
 var winningSet = trainingData.filter(obj=>obj.value === winningValue);
 var losingSet = trainingData.filter(obj=>obj.value === losingValue);
 
 var toBeNetworks = [1,2,3,4,5,6,7,8,9,10];
 
-var networks = toBeNetworks.map(num=>generateNet());
-networks.reduce(network=>{
-  var trainer = generateTrainer(network);
-  trainDataSet(trainer, winningSet);
+var network = generateNet();
+var trainer = generateTrainer(network);
+var debugArr =  [
+  {arr:[0,0,1], value:1},
+  {arr:[0,0,2], value:0},
+];
+for(var i = 0; i < 10000; i++){
+   
+  //trainer.train(y, 0);
+  trainDataSet(trainer,trainingData); 
 
-  var results = predictDataSet(winningSet, network, 1);
-  var resultsLosing = predictDataSet(losingSet, network, 0);
-  var percent =   results.filter( val => val > 0.5).length;
-  var percentLosing = resultsLosing.filter( val => val > 0.5).length;
+}
 
-  return network;
-});
+
 
 
 var exportObject = {
@@ -173,8 +183,9 @@ var exportObject = {
   winningData: winningSet,
   losingData: losingSet,
   testData, testData,
+  trainingData, trainingData,
   generateNet: generateNet,
-  networks: networks
+  network: network
 
 };
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')

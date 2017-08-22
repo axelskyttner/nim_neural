@@ -1,5 +1,6 @@
 var expect = require("chai").expect;
-var game = require("../src/main.js");
+var neural = require("../src/main.js");
+var game = require("../src/game.js");
 
 var meanValue = (arr)=>{
   
@@ -9,14 +10,17 @@ var meanValue = (arr)=>{
 var getMinValue = (arr)=>{
     return Math.min.apply(null, arr);
 }
-describe("test", function(){
-
+describe("test of make move", function(){
+  it("should give 0,0,1 when no other choise", function(){
+      var res =  game.move([2,0,0]).sort(); 
+      expect(res).to.deep.equal([0,0,1]);
+  });
 
 });
 
 describe("test of creating test data", function(){
   it("should have some test data", function(){
-    var testData = game.winningData;
+    var testData = neural.winningData;
     expect(testData.length).to.be.above(0);
   });
 });
@@ -24,7 +28,7 @@ describe("test of creating test data", function(){
 describe("test of layer generation",function(){
 
   it("should be able to create a net", function(){
-    var layer = game.generateNet();
+    var layer = neural.generateNet();
     expect(layer).to.exist;
 
   });
@@ -33,7 +37,7 @@ describe("test of layer generation",function(){
 
 describe("test of creating test data", function(){
   it("should have some test data", function(){
-    var testData = game.losingData;
+    var testData = neural.losingData;
     expect(testData.length).to.be.above(0);
   });
 });

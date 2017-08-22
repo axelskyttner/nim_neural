@@ -65,7 +65,7 @@ var generateLosingData = ()=>{
     losingMoves4.push(obj); 
   }
 
-  var losingSet = [ ].concat(losingMoves1).concat(losingMoves2);
+  var losingSet = [ ].concat(losingMoves1).concat(losingMoves2).concat(losingMoves3).concat(losingMoves4);
   return losingSet;
 }
 
@@ -165,7 +165,7 @@ var toBeNetworks = [1,2,3,4,5,6,7,8,9,10];
 
 var network = generateNet();
 var trainer = generateTrainer(network);
-for(var i = 0; i < 1000; i++){
+for(var i = 0; i < 100; i++){
    
   //trainer.train(y, 0);
   trainDataSet(trainer,trainingData); 

@@ -46,7 +46,15 @@
 
         var predictAndDisplayDataset = (net, dataSet, headerString) => {
             let results = nim.predictDataSet(dataSet, net, 1);
-            console.log("results", results);
+            var resultsBinary = results.map(a=>(a.w[0] > a.w[1]? 0 : 1));
+            var dataSetBinary = dataSet.map(a=>a.value);
+
+            var nrOfCorrect = resultsBinary.filter((a,index)=>{
+              return  a === dataSetBinary[index];
+  
+            }).length;
+            console.log("nrOfCorrect", nrOfCorrect);
+            console.log("of a total of ", resultsBinary.length);
             let divs = createDivs(dataSet.map(getArr), results);
             displayHeader( headerString);
             document.body.appendChild(createSummaryDiv(results, 0));
@@ -73,16 +81,15 @@
             div.innerHTML += "-----nrCorrect: " + resultSummary.nrCorrect + "------- of a total: " + resultSummary.totalNr;
             return div;
         } 
+
 var resultToString = (resultW)=> resultW[0] > resultW[1]  ? "Losing" : "Winning";
 
         var init = ()=>{
 
-
+    
 
         var network = nim.network;
         var trainingData = nim.trainingData;
-        var testDataWinning = nim.testData.filter(data=>data.value === 1);
-        var testDataLosing = nim.testData.filter(data=>data.value === 0);
 
         predictAndDisplayDataset(network, trainingData, "TrainingData");
         predictAndDisplayDataset(network, nim.testData, "TestData");

@@ -153,6 +153,12 @@ var predictDataSet = (arr,net)=>{
   });
 }
 
+var predictSet = (arr, net) =>{
+  var x = new convnetjs.Vol(arr);
+  return net.forward(x);
+
+}
+
 
 var allData = shuffleArray(generateData())
 var sliceValue = -10;
@@ -177,6 +183,7 @@ for(var i = 0; i < 100; i++){
 
 var exportObject = {
   predictDataSet: predictDataSet,
+  predictSet: predictSet,
   winningData: winningSet,
   losingData: losingSet,
   testData, testData,

@@ -1,16 +1,30 @@
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined'){ 
   var convnetjs = require('convnetjs');
+  var neural = require("./main.js");
 
 }
+else {
+  neural = nim;
+}
 
-//0 is the label for losing and 1 is the label for winning
-const losingValue = 0;
-const winningValue = 1;
 
 var move = (arr)=>{
   var validMoves = generateValidMoves(arr);
-  console.log("validMoves", validMoves);
-  return validMoves[0];
+  var results = validMoves.map((arr)=>{
+    return neural.predictSet(arr, neural.network);
+  });
+  var bestIndex = results.reduce(function(bestIndex, res, index, array){
+    if(res.w[1] > array[bestIndex].w[1]){
+      return index;
+
+    }
+    else {
+      return bestIndex;
+    }
+  }, 0);
+  console.log("results", results);
+  console.log("bestIndex", bestIndex);
+  return validMoves[bestIndex];
 };
 
 var generateValidMoves = (arr) =>{
@@ -47,6 +61,6 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
   module.exports = exportObject;
 else{
 
-  window.nim = exportObject;
+  window.nimGame = exportObject;
 
 }

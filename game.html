@@ -1,0 +1,97 @@
+<html>
+
+<head>
+    <script src="node_modules/convnetjs/build/convnet.js"></script>
+    <script src="src/main.js"></script>
+    <script src="src/game.js"></script>
+
+</head>
+
+<body>
+    <div id="testArray">
+
+    </div>
+    <script>
+        var createDivs = (testArray, results) => {
+            var toBeRendered = testArray.map((data, index) => {
+                return { data: data, result: results[index] };
+            });
+
+            var divs = toBeRendered.map((obj) => {
+                let div = document.createElement("div");
+                var res = 100;
+                var x0 = Math.round(obj.result.w[0]*res)/res;
+                var x1 = Math.round(obj.result.w[1]*res)/res;
+                div.innerHTML += obj.data + " : " ;
+                div.innerHTML +=  " " + x0 + ","  +  x1 + " ";
+                div.innerHTML += resultToString(obj.result.w);
+                return div;
+            });
+            return divs;
+        }
+
+        var displayHeader = (headerString)=>{
+
+            var headerLosing = document.createElement("h2");
+            headerLosing.innerHTML = headerString;
+            document.body.appendChild(headerLosing);
+
+        }
+
+        var displayTestDivs = (divs) => {
+
+            divs.forEach(function (element) {
+                document.body.appendChild(element);
+            }, this);
+        };
+
+        var predictAndDisplayDataset = (net, dataSet, headerString) => {
+            let results = nim.predictDataSet(dataSet, net, 1);
+            var resultsBinary = results.map(a=>(a.w[0] > a.w[1]? 0 : 1));
+            var dataSetBinary = dataSet.map(a=>a.value);
+
+            var nrOfCorrect = resultsBinary.filter((a,index)=>{
+              return  a === dataSetBinary[index];
+  
+            }).length;
+            console.log("nrOfCorrect", nrOfCorrect);
+            console.log("of a total of ", resultsBinary.length);
+            let divs = createDivs(dataSet.map(getArr), results);
+            displayHeader( headerString);
+            document.body.appendChild(createSummaryDiv(results, 0));
+            displayTestDivs(divs, headerString);
+        } 
+        var getArr = obj=>obj.arr;
+        var mean = (results) => {
+            return results.reduce((sum, a) => sum + a, 0) / results.length;
+        }
+        var nrOfCorrect = function (results, winningSet) {
+            return results.filter(function (result) {
+              return result >= 0.5;
+            }).length;
+        };
+        var totalNr = (results)=>results.length;
+        var createSummaryDiv = (results, winningSet) => {
+            let resultSummary = {
+                nrCorrect: nrOfCorrect(results, winningSet),
+                totalNr: totalNr(results),
+                mean: mean(results)
+            }
+            var div = document.createElement("div");
+            div.innerHTML += "-----Mean: " + resultSummary.mean + "-------<br>";
+            div.innerHTML += "-----nrCorrect: " + resultSummary.nrCorrect + "------- of a total: " + resultSummary.totalNr;
+            return div;
+        } 
+
+var resultToString = (resultW)=> resultW[0] > resultW[1]  ? "Losing" : "Winning";
+
+        var init = ()=>{
+        var value = [2,2,2];
+      
+        return nimGame.move(value);
+        }
+  console.log(init());
+    </script>
+</body>
+
+</html>

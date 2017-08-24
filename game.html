@@ -2,15 +2,19 @@
 
 <head>
     <script src="node_modules/convnetjs/build/convnet.js"></script>
+    <script src="node_modules/react/react.js"></script>
+    <script src="node_modules/react-dom/dist/react-dom.js"></script>
     <script src="src/main.js"></script>
     <script src="src/game.js"></script>
 
 </head>
 
 <body>
+    
     <div id="testArray">
 
     </div>
+    <div id="root"></div>
     <script>
         var createDivs = (testArray, results) => {
             var toBeRendered = testArray.map((data, index) => {

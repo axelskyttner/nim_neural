@@ -11,6 +11,16 @@ function Square(props){
     );
 }
 
+function History(props){
+    return (
+        <div>
+        {props.history.map(arr=><div>{arr.toString()}</div>)}
+        </div>
+
+    );
+
+}
+
 class NimBoard extends React.Component {
   constructor(props) {
     super(props);
@@ -22,7 +32,6 @@ class NimBoard extends React.Component {
     };
     this.handleSubmit = this.handleSubmit.bind(this); 
     this.handleChange = this.handleChange.bind(this); 
-    this.getHistory = this.getHistory.bind(this); 
 
   }
   handleSubmit(event) {
@@ -40,12 +49,18 @@ class NimBoard extends React.Component {
     this.setState({value:event.target.value});
   }
 
-  getHistory(){
-    console.log("this.state.history",this.state.history );
-    
 
-    return this.state.history.map(arr=>(arr.join(",") + "-------------"));
+  renderHistory(){
+
+    return (
+        <History 
+          history={this.state.history}
+        />
+    );
+
+
   }
+
 
   render () {
    return  (
@@ -61,7 +76,7 @@ class NimBoard extends React.Component {
 
       </form>
       <div>
-      {  this.getHistory()}        
+      {  this.renderHistory()}        
      
       </div>
 
@@ -133,9 +148,6 @@ class Game extends React.Component {
     return (
       <div className="game">
           <NimBoard />
-        <div className="game-board">
-          <Board />
-        </div>
         <div className="game-info">
           <div>{/* status */}</div>
           <ol>{/* TODO */}</ol>

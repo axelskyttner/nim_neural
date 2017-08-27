@@ -2,6 +2,7 @@
 
 <head>
     <script src="node_modules/convnetjs/build/convnet.js"></script>
+    <script src="src/data.js"></script>
     <script src="src/main.js"></script>
 
 </head>
@@ -21,9 +22,18 @@
                 var res = 100;
                 var x0 = Math.round(obj.result.w[0]*res)/res;
                 var x1 = Math.round(obj.result.w[1]*res)/res;
-                div.innerHTML += obj.data + " : " ;
+                div.innerHTML += obj.data.arr + " : " ;
                 div.innerHTML +=  " " + x0 + ","  +  x1 + " ";
                 div.innerHTML += resultToString(obj.result.w);
+
+                if(correctResult(obj.result.w, obj.data.value)){
+
+                  div.style.backgroundColor = "green";
+                }
+                else {
+
+                  div.style.backgroundColor ="red";
+                }
                 return div;
             });
             return divs;
@@ -50,12 +60,13 @@
             var dataSetBinary = dataSet.map(a=>a.value);
 
             var nrOfCorrect = resultsBinary.filter((a,index)=>{
+              console.log("a",a);
               return  a === dataSetBinary[index];
   
             }).length;
             console.log("nrOfCorrect", nrOfCorrect);
             console.log("of a total of ", resultsBinary.length);
-            let divs = createDivs(dataSet.map(getArr), results);
+            let divs = createDivs(dataSet, results);
             displayHeader( headerString);
             document.body.appendChild(createSummaryDiv(results, 0));
             displayTestDivs(divs, headerString);
@@ -83,6 +94,29 @@
         } 
 
 var resultToString = (resultW)=> resultW[0] > resultW[1]  ? "Losing" : "Winning";
+var correctResult = (resultW, ans)=> {
+  console.log("ans", ans);
+
+  var maxIndex;
+  if(resultW[0] > resultW[1]){
+    var maxIndex = 0;
+
+  }
+  else {
+    maxIndex = 1;
+  };
+  
+  
+  if(maxIndex === ans){
+
+    return true;
+  }
+  else {
+    return false;
+  }
+
+
+}
 
         var init = ()=>{
 

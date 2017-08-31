@@ -9,8 +9,7 @@ var generateNet = ()=>{
   var layer_defs = [];
 
   // input layer of size 1x1x2 (all volumes are 3D)
-  layer_defs.push({type:'input', out_sx:1, out_sy:1, out_depth:3});
-  layer_defs.push({type:'fc', num_neurons:10, activation:'relu'});
+  layer_defs.push({type:'input', out_sx:1, out_sy:1, out_depth:30});
   layer_defs.push({type:'fc', num_neurons:10, activation:'relu'});
 
 
@@ -27,7 +26,7 @@ var trainDataSet = (trainer, dataSet )=>{
 
   dataSet.map(obj=>{
     var arr = obj.arr;
-    var vol = new convnetjs.Vol(arr.sort());
+    var vol = createConvNetVol(arr.sort());
     var value = obj.value;
     return {vol:vol, value:value};
   }).
@@ -36,6 +35,13 @@ var trainDataSet = (trainer, dataSet )=>{
   });
 
 };
+
+var createConvNetVol = (arr)=>{
+    var binaryArr = decToBin(arr.sort());
+    var flatArr = binaryArr.reduce( (arr1, arr2)=>arr1.concat(arr2));
+    return new convnetjs.Vol(flatArr);
+
+}
 
 
 var generateTrainer = (net)=>{
@@ -52,7 +58,7 @@ var predictDataSet = (arr,net)=>{
   return arr.map(obj=>{
     
     var valueArr = obj.arr; 
-    return new convnetjs.Vol(valueArr.sort());
+    return createConvNetVol(valueArr.sort());
   }).map(x=>{
     var res = net.forward(x);
     return net.forward(x);
@@ -60,9 +66,22 @@ var predictDataSet = (arr,net)=>{
 }
 
 var predictSet = (arr, net) =>{
-  var x = new convnetjs.Vol(arr.sort());
+  var x = createConvNetVol(arr);
+
   return net.forward(x);
 
+}
+
+var decToBin = (val)=>{
+  var binaries = val.map(val=>{
+    
+    var binaryArrStrings =  val.toString(2).split("");
+    var binaryArr = binaryArrStrings.map(valString=>parseInt(valString));
+    var fillUpArrLength = 10 - binaryArr.length;
+    var fillUpArr = new Array(fillUpArrLength).fill(0);
+    return  fillUpArr.concat(binaryArr);
+  });
+  return binaries;
 }
 
 
@@ -77,7 +96,7 @@ var trainer = generateTrainer(network);
 for(var i = 0; i < 10; i++){
    
   //trainer.train(y, 0);
-  trainDataSet(trainer,trainingData); 
+  //trainDataSet(trainer,trainingData); 
 
 }
 
@@ -94,6 +113,7 @@ var exportObject = {
   testData, testData,
   trainingData, trainingData,
   generateNet: generateNet,
+  decToBin: decToBin,
   network: network
 
 };

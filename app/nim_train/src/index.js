@@ -6,17 +6,75 @@ var data = require('../../../src/data.js');
 var gameSolver = require( '../../../src/game.js');
 
 function Data(props){
-  return <div>{props.arr.toString()}, { props.value}</div>;
+  return <div style={
+    {"margin-bottom":10 + 'px',
+  
+    "background-color": getDivColor(props.expectedResult, props.predictedResult),
+  }}> 
+  Data: [{props.arr.toString()}] || 
+  expectedResult:  {props.expectedResult} ||
+  predictedResult:  {props.predictedResult} || 
+  predictionData:  {props.prediction0}, {props.prediction1}
+  
+  </div>;
+
+}
+
+var getTrainingData = ()=>{
+
+  return data.getTrainingData();
+}
+
+
+var getDivColor = (expectedResult, predictedResult)=>{
+
+  return (expectedResult === predictedResult)? 'green' : 'red';
+}
+
+var createAndTrainNetwork = ()=>{
+  var trainingData = getTrainingData();
+  
+  
+  var network = nim.generateNet();
+  var trainer = nim.generateTrainer(network);
+  for(var i = 0; i < 10; i++){
+     
+    //trainer.train(y, 0);
+    nim.trainDataSet(trainer, trainingData); 
+  
+  }
+
+  return network;
+}
+
+var getResultString  = (val) =>{
+  return (Math.round(val) === 1)? "winning" : "Losing";
+  
+}
+
+var roundValue = (val)=>{
+  return Math.round(val*100)/100;
+}
+
+var getPrediction = (arr, network, index)=>{
+   
+  return roundValue(nim.predictSet(arr, network).w[index]);
 
 }
 
 function History(props){
     return (
         <div>
-        {data.getWinningData().map(obj=>
+        {props.data.map(obj=>
             <Data 
-              arr={obj.arr } 
+              arr={obj.arr} 
               value={obj.value}
+              prediction0 = {getPrediction(obj.arr, props.network, 0)} 
+              prediction1 = {getPrediction(obj.arr, props.network, 1)} 
+              predictedResult = {getResultString(getPrediction(obj.arr, props.network, 1))}
+              expectedResult = {getResultString(obj.value)}
+              
+
           /> 
             )}
         </div>
@@ -41,7 +99,6 @@ class NimBoard extends React.Component {
   handleSubmit(event) {
 
     var arr = JSON.parse(this.state.value); 
-    console.log("arr");
     var copyHist = this.state.history.slice();
     copyHist.push(arr);
     copyHist.push(gameSolver.move(arr));
@@ -58,7 +115,8 @@ class NimBoard extends React.Component {
 
     return (
         <History 
-          history={this.state.history}
+          data={getTrainingData()} 
+          network={createAndTrainNetwork()} 
         />
     );
 

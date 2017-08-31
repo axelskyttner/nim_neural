@@ -86,6 +86,8 @@ for(var i = 0; i < 10; i++){
 
 var exportObject = {
   predictDataSet: predictDataSet,
+  generateTrainer: generateTrainer,
+  trainDataSet: trainDataSet,
   predictSet: predictSet,
   winningData: winningSet,
   losingData: losingSet,

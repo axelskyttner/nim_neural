@@ -2,6 +2,7 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined'){
   var convnetjs = require('convnetjs');
 
 }
+var sortBySize = (a,b)=>a > b;
 
 //0 is the label for losing and 1 is the label for winning
 const losingValue = 0;
@@ -62,7 +63,7 @@ var losingMoves7 = ()=>{
       arr.push([2,4,i]);
 
   }
-  for(var i = 4; i < 10; i++){
+  for(var i = 5; i < 10; i++){
       arr.push([2,i,6]);
 
   }
@@ -161,7 +162,7 @@ var generateData = ()=>{
   var allData = generateWinningData().concat(generateLosingData());
   var allData = allData.map(obj=>{
     return {value: obj.value,
-      arr: obj.arr.sort()
+      arr: obj.arr.sort(sortBySize)
     }
 
   });

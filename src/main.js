@@ -2,7 +2,7 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined'){
   var convnetjs = require('convnetjs');
   var myData = require('./data.js');
 }
-
+var sortBySize = (a,b)=>a > b;
 
 var generateNet = ()=>{
 
@@ -26,7 +26,7 @@ var trainDataSet = (trainer, dataSet )=>{
 
   dataSet.map(obj=>{
     var arr = obj.arr;
-    var vol = createConvNetVol(arr.sort());
+    var vol = createConvNetVol(arr.sort(sortBySize));
     var value = obj.value;
     return {vol:vol, value:value};
   }).
@@ -37,7 +37,7 @@ var trainDataSet = (trainer, dataSet )=>{
 };
 
 var createConvNetVol = (arr)=>{
-    var binaryArr = decToBin(arr.sort());
+    var binaryArr = decToBin(arr.sort(sortBySize));
     var flatArr = binaryArr.reduce( (arr1, arr2)=>arr1.concat(arr2));
     return new convnetjs.Vol(flatArr);
 
@@ -58,7 +58,7 @@ var predictDataSet = (arr,net)=>{
   return arr.map(obj=>{
     
     var valueArr = obj.arr; 
-    return createConvNetVol(valueArr.sort());
+    return createConvNetVol(valueArr.sort(sortBySize));
   }).map(x=>{
     var res = net.forward(x);
     return net.forward(x);

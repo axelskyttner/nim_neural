@@ -39,7 +39,7 @@ var createAndTrainNetwork = ()=>{
   
   var network = nim.generateNet();
   var trainer = nim.generateTrainer(network);
-  for(var i = 0; i < 100; i++){
+  for(var i = 0; i < 1000; i++){
      
     //trainer.train(y, 0);
     nim.trainDataSet(trainer, trainingData); 

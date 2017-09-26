@@ -1,6 +1,7 @@
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined'){ 
   var convnetjs = require('convnetjs');
   var neural = require("./main.js");
+  var data = require("./data.js");
 
 }
 else {
@@ -8,13 +9,40 @@ else {
 }
 
 
+
+var getTrainingData = ()=>{
+
+  return data.getTrainingData();
+}
+
+
+
+var createAndTrainNetwork = ()=>{
+  var trainingData = getTrainingData();
+  
+  
+  var network = neural.generateNet();
+  var trainer = neural.generateTrainer(network);
+  for(var i = 0; i < 100; i++){
+     
+    //trainer.train(y, 0);
+    neural.trainDataSet(trainer, trainingData); 
+  
+  }
+
+  return network;
+}
+
 var move = (arr)=>{
   var validMoves = generateValidMoves(arr);
+
+  var network = createAndTrainNetwork();
   var results = validMoves.map((arr)=>{
-    return neural.predictSet(arr, neural.network);
+    return neural.predictSet(arr, network);
   });
+  var winningValue = 1;
   var bestIndex = results.reduce(function(bestIndex, res, index, array){
-    if(res.w[1] > array[bestIndex].w[1]){
+    if(res.w[winningValue] > array[bestIndex].w[winningValue]){
       return index;
 
     }
@@ -22,8 +50,8 @@ var move = (arr)=>{
       return bestIndex;
     }
   }, 0);
-  console.log("results", results);
   console.log("bestIndex", bestIndex);
+  console.log("validMoves", validMoves);
   return validMoves[bestIndex];
 };
 
@@ -37,7 +65,7 @@ var generateValidMoves = (arr) =>{
 
     validMoves.push([arr[0], j, arr[2]]);
   }
-  for(var k = 0; k < arr[1]; k++){
+  for(var k = 0; k < arr[2]; k++){
 
     validMoves.push([arr[0], arr[1], k]);
   }

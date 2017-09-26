@@ -43,8 +43,6 @@ var losingMoves6 = ()=>{
   for(var i = 1; i < 10; i++){
     for(var j = 0; j < 10; j++){
       arr.push([i,i,j]);
-      
-
     }
 
 
@@ -57,6 +55,57 @@ var losingMoves6 = ()=>{
 
 }
 
+var losingMoves7 = ()=>{
+  var arr = [];
+
+  for(var i = 7; i < 10; i++){
+      arr.push([2,4,i]);
+
+  }
+  for(var i = 4; i < 10; i++){
+      arr.push([2,i,6]);
+
+  }
+
+
+  return arr.map(arr=>{
+
+    return {arr:arr, value:losingValue};
+  });
+
+}
+
+var losingMoves8 = ()=>{
+
+  var arr = [];
+
+  for(var i = 4; i < 10; i++){
+    arr.push([1,2,i]);
+
+
+  return arr.map(arr=>{
+
+    return {arr:arr, value:losingValue};
+  });
+  }
+
+}
+
+var losingMoves9 = ()=>{
+
+  var arr = [];
+
+  for(var i = 2; i < 10; i++){
+    arr.push([1,1,i]);
+
+
+  return arr.map(arr=>{
+
+    return {arr:arr, value:losingValue};
+  });
+  }
+
+}
 var generateLosingData = ()=>{
   var losingMoves1 = [];
   var losingMoves2 = [];
@@ -69,7 +118,7 @@ var generateLosingData = ()=>{
     }
     losingMoves1.push(obj); 
   }
-  for(var i = 5; i < 40;i = i + 2){
+  for(var i = 5; i < 10;i = i + 2){
     var obj = {
       arr: [1,i,i+1],
       value: losingValue
@@ -90,18 +139,32 @@ var generateLosingData = ()=>{
   }
   for(var i = 6; i < 10;i++){
     var obj = {
-      arr: [1,4,i],
-      value: losingValue
+      arr: [1,4,i], value: losingValue
     }
     losingMoves4.push(obj); 
   }
 
-  var losingSet = [ ].concat(losingMoves1).concat(losingMoves2).concat(losingMoves2).concat(losingMoves2).concat(losingMoves3).concat(losingMoves4).concat(losingMoves5());
+  var losingSet = [ ].
+    concat(losingMoves1).
+    concat(losingMoves2).
+    concat(losingMoves3).
+    concat(losingMoves4).
+    concat(losingMoves5()).
+    concat(losingMoves6()).
+    concat(losingMoves7()).
+    concat(losingMoves8()).
+    concat(losingMoves9());
   return losingSet;
 }
 
 var generateData = ()=>{
   var allData = generateWinningData().concat(generateLosingData());
+  var allData = allData.map(obj=>{
+    return {value: obj.value,
+      arr: obj.arr.sort()
+    }
+
+  });
   return allData;
 
 
@@ -154,8 +217,8 @@ var shuffleArray = function(array) {
 
 
 
-var allData = shuffleArray(generateData())
-var sliceValue = -10;
+var allData = shuffleArray(generateData());
+var sliceValue = -Math.round(allData.length*0.25);
 
 var getTrainingData = () =>{
   var trainingData = allData.slice(0,sliceValue);

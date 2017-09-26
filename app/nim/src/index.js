@@ -36,8 +36,7 @@ class NimBoard extends React.Component {
   }
   handleSubmit(event) {
 
-    var arr = JSON.parse(this.state.value); 
-    console.log("arr");
+    var arr = JSON.parse("[" + this.state.value + "]" ); 
     var copyHist = this.state.history.slice();
     copyHist.push(arr);
     copyHist.push(gameSolver.move(arr));
@@ -65,6 +64,8 @@ class NimBoard extends React.Component {
   render () {
    return  (
     <div>
+    <h2> Write three numbers and see the response. It have to be three numbers divided by a ','</h2>
+    <h4>You can try to write 2,4,6 for example</h4>
       <form onSubmit={this.handleSubmit}>
         <input type="text" onChange={this.handleChange}>
         
@@ -87,61 +88,6 @@ class NimBoard extends React.Component {
 
 }
 
-class Board extends React.Component {
-  constructor() {
-    super();
-    this.state= {
-      squares: Array(9).fill(null),
-      xIsNext:  true,
-    };
-
-  }
-
-  handleClick(i) {
-
-    const squares = this.state.squares.slice();
-    squares[i] = this.state.xIsNext ? 'X' : 'O';
-    this.setState({
-      squares:squares,
-      xIsNext: !this.state.xIsNext,
-    
-    });
-
-  }
-  renderSquare(i) {
-    return (
-      <Square 
-        value={this.state.squares[i]}
-        onClick={() =>this.handleClick(i)}
-      />
-      );
-  }
-
-  render() {
-    const status = (this.state.xIsNext)? 'Next player: X' : 'Next player : 0';
-
-    return (
-      <div>
-        <div className="status">{status}</div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
-      </div>
-    );
-  }
-}
 
 class Game extends React.Component {
   render() {

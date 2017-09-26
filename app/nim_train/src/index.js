@@ -28,8 +28,10 @@ var getTrainingData = ()=>{
 
 var getDivColor = (expectedResult, predictedResult)=>{
 
-  return (expectedResult === predictedResult)? 'green' : 'red';
+  return (expectedResult === predictedResult)? 'white' : 'red';
 }
+
+
 
 var createAndTrainNetwork = ()=>{
   var trainingData = getTrainingData();
@@ -37,7 +39,7 @@ var createAndTrainNetwork = ()=>{
   
   var network = nim.generateNet();
   var trainer = nim.generateTrainer(network);
-  for(var i = 0; i < 10; i++){
+  for(var i = 0; i < 100; i++){
      
     //trainer.train(y, 0);
     nim.trainDataSet(trainer, trainingData); 
@@ -51,6 +53,8 @@ var getResultString  = (val) =>{
   return (Math.round(val) === 1)? "winning" : "Losing";
   
 }
+
+
 
 var roundValue = (val)=>{
   return Math.round(val*100)/100;
@@ -88,7 +92,7 @@ class NimBoard extends React.Component {
     super(props);
 
     this.state = {
-      value: 'coconut',
+      network: createAndTrainNetwork(),
       history: [[1,2,3]],
     
     };
@@ -112,12 +116,21 @@ class NimBoard extends React.Component {
 
 
   renderHistory(){
-
+  
     return (
+        <div>
+      <h2> This is the trainingsdata</h2>
         <History 
           data={getTrainingData()} 
-          network={createAndTrainNetwork()} 
+          network={this.state.network} 
         />
+      <h2> This is the testData</h2>
+        <History 
+          data={data.getTestData()} 
+          network={this.state.network} 
+        />
+
+        </div>
     );
 
 
@@ -127,7 +140,6 @@ class NimBoard extends React.Component {
   render () {
    return  (
     <div>
-      <h2> This is the data</h2>
       <div>
       {  this.renderHistory()}        
      

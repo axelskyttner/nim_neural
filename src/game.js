@@ -2,6 +2,7 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined'){
   var convnetjs = require('convnetjs');
   var neural = require("./main.js");
   var data = require("./data.js");
+  var savedNetwork = require("./savedNetwork.js");
 
 }
 else {
@@ -23,7 +24,7 @@ var createAndTrainNetwork = ()=>{
   
   var network = neural.generateNet();
   var trainer = neural.generateTrainer(network);
-  for(var i = 0; i < 100; i++){
+  for(var i = 0; i <20; i++){
      
     //trainer.train(y, 0);
     neural.trainDataSet(trainer, trainingData); 
@@ -33,13 +34,33 @@ var createAndTrainNetwork = ()=>{
   return network;
 }
 
+var getPreLoadedNetwork = ()=>{
+
+  var networkString = savedNetwork;
+	// later, to recreate the network:
+  var json = JSON.parse(networkString); // creates json object out of a string
+  var net2 = new convnetjs.Net(); // create an empty network
+  net2.fromJSON(json); // load all parameters from JSON
+  return  net2;
+  
+}
+
+var globalNetwork = createAndTrainNetwork();
+var getNetwork = ()=>{
+
+  return getPreLoadedNetwork();
+
+}
+
 var move = (arr)=>{
   var validMoves = generateValidMoves(arr);
-
-  var network = createAndTrainNetwork();
+  var network = getNetwork();
   var results = validMoves.map((arr)=>{
     return neural.predictSet(arr, network);
   });
+
+  console.log("validMoves", validMoves);
+  console.log("results", results.map(a=>a.w));
   var winningValue = 1;
   var bestIndex = results.reduce(function(bestIndex, res, index, array){
     if(res.w[winningValue] > array[bestIndex].w[winningValue]){
@@ -50,8 +71,6 @@ var move = (arr)=>{
       return bestIndex;
     }
   }, 0);
-  console.log("bestIndex", bestIndex);
-  console.log("validMoves", validMoves);
   return validMoves[bestIndex];
 };
 

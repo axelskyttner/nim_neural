@@ -26,6 +26,7 @@ class NimBoard extends React.Component {
     super(props);
 
     this.state = {
+      //fix: remove value
       value: 'coconut',
       history: [[1,2,3]],
     

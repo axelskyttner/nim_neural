@@ -93,12 +93,6 @@ var losingSet = myData.getLosingData();
 
 var network = generateNet();
 var trainer = generateTrainer(network);
-for(var i = 0; i < 1; i++){
-   
-  //trainer.train(y, 0);
-  //trainDataSet(trainer,trainingData); 
-
-}
 
 
 

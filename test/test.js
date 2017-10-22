@@ -16,6 +16,26 @@ describe("test of make move", function(){
       expect(res).to.deep.equal([0,0,1]);
   });
 
+  it("should give 0,0,1 when given 0,0,3", function(){
+      var res =  game.move([3,0,0]).sort(); 
+      expect(res).to.deep.equal([0,0,1]);
+  });
+
+  it("should give 0,2,2 when given 2,2,2", function(){
+      var res =  game.move([2,2,2]).sort(); 
+      expect(res).to.deep.equal([0,2,2]);
+  });
+
+  it("should give 0,3,3 when given 3,3,3", function(){
+      var res =  game.move([3,3,3]).sort(); 
+      expect(res).to.deep.equal([0,3,3]);
+  });
+
+  it("should give 1,1,1 when given 1,1,3", function(){
+      var res =  game.move([1,1,3]).sort(); 
+      expect(res).to.deep.equal([1,1,1]);
+  });
+
 });
 
 describe("test of creating test data", function(){
@@ -41,3 +61,6 @@ describe("test of creating test data", function(){
     expect(testData.length).to.be.above(0);
   });
 });
+
+
+

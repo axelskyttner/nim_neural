@@ -20,6 +20,7 @@ function Data(props){
 
 }
 
+
 var getTrainingData = ()=>{
 
   return data.getTrainingData();
@@ -35,17 +36,18 @@ var getDivColor = (expectedResult, predictedResult)=>{
 
 var createAndTrainNetwork = ()=>{
   var trainingData = getTrainingData();
+  console.log("trainingData", trainingData);
   
   
   var network = nim.generateNet();
   var trainer = nim.generateTrainer(network);
-  for(var i = 0; i < 1000; i++){
+  for(var i = 0; i < 5000; i++){
      
     //trainer.train(y, 0);
     nim.trainDataSet(trainer, trainingData); 
   
   }
-
+  console.log("network", network);
   return network;
 }
 
@@ -129,6 +131,10 @@ class NimBoard extends React.Component {
           data={data.getTestData()} 
           network={this.state.network} 
         />
+        <div>
+        <h2>The network</h2>
+          {JSON.stringify(this.state.network.toJSON())}
+        </div>
 
         </div>
     );

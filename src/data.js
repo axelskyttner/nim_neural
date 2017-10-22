@@ -42,11 +42,9 @@ var losingMoves6 = ()=>{
   var arr = [];
 
   for(var i = 1; i < 10; i++){
-    for(var j = 0; j < 10; j++){
+    for(var j = 1; j < 10; j++){
       arr.push([i,i,j]);
     }
-
-
   }
 
   return arr.map(arr=>{
@@ -107,37 +105,13 @@ var losingMoves9 = ()=>{
   }
 
 }
-var generateLosingData = ()=>{
-  var losingMoves1 = [];
-  var losingMoves2 = [];
-  var losingMoves3 = [];
+
+
+var losingMoves4 = ()=>{
+
+
   var losingMoves4 = [];
-  for(var i = 2; i < 10;i++){
-    var obj = {
-      arr: [0,0,i],
-      value: losingValue
-    }
-    losingMoves1.push(obj); 
-  }
-  for(var i = 5; i < 10;i = i + 2){
-    var obj = {
-      arr: [1,i,i+1],
-      value: losingValue
-    }
-    losingMoves2.push(obj); 
-  }
 
-  for(var i = 1; i < 10; i++){
-    for(var j = 2; j < 10; j++){
-      
-      var obj = {
-        arr: [i,j,j],
-        value: losingValue
-      }
-      losingMoves3.push(obj);
-
-    }
-  }
   for(var i = 6; i < 10;i++){
     var obj = {
       arr: [1,4,i], value: losingValue
@@ -145,16 +119,83 @@ var generateLosingData = ()=>{
     losingMoves4.push(obj); 
   }
 
+  return losingMoves4;
+
+}
+
+var losingMoves3 = ()=>{
+  var losingMoves = [];
+  for(var i = 1; i < 10; i++){
+    for(var j = 2; j < 10; j++){
+      
+      var obj = {
+        arr: [i,j,j],
+        value: losingValue
+      }
+      losingMoves.push(obj);
+
+    }
+  }
+
+  return losingMoves;
+
+}
+
+var losingMoves2 = ()=>{
+  var losingMoves = [];
+  for(var i = 5; i < 10;i = i + 2){
+    var obj = {
+      arr: [1,i,i+1],
+      value: losingValue
+    }
+    losingMoves.push(obj); 
+  }
+
+  return losingMoves;
+
+}
+var losingMoves1 = ()=>{
+  var losingMoves = [];
+  for(var i = 2; i < 10;i++){
+    var arr = [0,0,i];
+    var obj = {
+      arr: [0,0,i],
+      value: losingValue
+    }
+    losingMoves.push(arr); 
+  }
+
+  return losingMoves;
+
+}
+
+var generateLosingData = ()=>{
+  /*
   var losingSet = [ ].
-    concat(losingMoves1).
-    concat(losingMoves2).
-    concat(losingMoves3).
-    concat(losingMoves4).
+    concat(losingMoves1()).
+    concat(losingMoves2()).
+    concat(losingMoves3()).
+    concat(losingMoves4()).
     concat(losingMoves5()).
     concat(losingMoves6()).
     concat(losingMoves7()).
     concat(losingMoves8()).
-    concat(losingMoves9());
+    concat(losingMoves9());*/
+
+  var losingValues = [
+    [1,2,2],
+    [0,1,1],
+    [0,1,2],
+    [0,2,3],
+    [2,3,3],
+    [3,5,5],
+    [1,3,3]
+  ];
+
+  var losingSet = losingValues.concat(losingMoves1()).map(arr=>{
+    return {arr:arr, value:losingValue}
+  });
+
   return losingSet;
 }
 
@@ -177,33 +218,59 @@ var generateWinningData = ()=>{
 
   var winningMoves1 = [];
   var winningMoves2 = [];
-  for(var i = 2; i< 15; i++){
+  for(var i = 2; i< 10; i++){
 
     var obj = {
       arr:[0,i,i],
       value: winningValue
     }
-    winningMoves1.push(obj);
+    winningMoves1.push([0,i,i]);
   }
-  for(var i = 2; i< 20; i = i + 2){
+  for(var i = 2; i< 10; i = i + 2){
     var obj = {
       arr:[1,i,i+1],
       value: winningValue
     }
     winningMoves2.push(obj);
   }
-  var obj = {
+  var twoFourSizeObj = {
 
     arr: [2,4,6],
     value:winningValue
 
   }
-  var winningSet = [ obj ].concat(winningMoves2).concat(winningMoves2);
+  var zeroZeroOneObj = {
+
+    arr: [0,0,1],
+    value:winningValue
+
+  }
+
+  var winningMovesFromJonathan = [
+    [0,0,1],
+    [1,1,1],
+    [1,2,3],
+    [1,4,5],
+    [1,6,7],
+    [1,8,9],
+    [1,10,11],
+    [2,4,6],
+    [2,5,7],
+    [2,8,10],
+    [3,4,7],
+    [3,5,6],
+    [3,8,11],
+    [4,8,12]
+  ];
+
+  var winningSet = winningMovesFromJonathan.concat(winningMoves1).map(arr=>{
+    return {arr:arr, value:winningValue}
+  });
+  //var winningSet = [ twoFourSizeObj, zeroZeroOneObj ].concat(winningMoves1).concat(winningMoves2);
 
   return winningSet;
 
 }
-
 
 
 var shuffleArray = function(array) {
@@ -219,7 +286,7 @@ var shuffleArray = function(array) {
 
 
 var allData = shuffleArray(generateData());
-var sliceValue = -Math.round(allData.length*0.25);
+var sliceValue = -Math.round(allData.length*0.1);
 
 var getTrainingData = () =>{
   var trainingData = allData.slice(0,sliceValue);
@@ -239,9 +306,14 @@ var getWinningData = ()=>{
 
 }
 
-var getLosingData = ()=>{
-  var trainingData = getTrainingData();
-  var losingSet = trainingData.filter(obj=>obj.value === losingValue);
+var getLosingData = (data)=>{
+
+  if(data === undefined){
+    
+    var trainingData = getTrainingData();
+    data = trainingData;
+  }
+  var losingSet = data.filter(obj=>obj.value === losingValue);
   return losingSet;
 }
 
@@ -251,7 +323,6 @@ var exportObject = {
   getTrainingData: getTrainingData,
   getTestData: getTestData,
   getLosingData: getLosingData,
-
 };
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
   module.exports = exportObject;
